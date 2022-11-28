@@ -28,7 +28,6 @@ class ArithmeticExpressionParser:
     def Next(self):
         return Lex(self.input[self.index + 1])
 
-
     def Digit(self):
         if self.Next().getType() == "Number":
             self.index-=1
@@ -42,26 +41,25 @@ class ArithmeticExpressionParser:
             self.index += 1
             self.token = Lex(self.input[self.index])
 
+    def Term(self):
+        self.Factor()
+        self.TermB()
 
     def TermB(self):
-        if self.token.getValue() == "/" or self.token.getValue() == "*":
+        if self.token.getValue() == "*" or self.token.getValue() == "/":
             self.Consume()
             self.Factor()
             self.TermB()
     
-    def Term(self):
-        self.Factor()
-        self.TermB()
+    def Expression(self):
+        self.Term()
+        self.ExpressionB()
 
     def ExpressionB(self):
         if self.token.getValue() == "+" or self.token.getValue() == "-":
             self.Consume()
             self.Term()
             self.ExpressionB()
-
-    def Expression(self):
-        self.Term()
-        self.ExpressionB()
 
     def Factor(self):
         if self.token.getValue() == "(":
@@ -124,5 +122,5 @@ def Lex(character):
 
 
 #Test
-AP = ArithmeticExpressionParser()
-AP.Parse()
+AEP = ArithmeticExpressionParser()
+AEP.Parse()
